@@ -1,65 +1,56 @@
-# -*- coding: utf-8 -*-
-
-""" AlexNet.
-Applying 'Alexnet' to Oxford's 17 Category Flower Dataset classification task.
-References:
-    - Alex Krizhevsky, Ilya Sutskever & Geoffrey E. Hinton. ImageNet
-    Classification with Deep Convolutional Neural Networks. NIPS, 2012.
-    - 17 Category Flower Dataset. Maria-Elena Nilsback and Andrew Zisserman.
-Links:
-    - [AlexNet Paper](http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf)
-    - [Flower Dataset (17)](http://www.robots.ox.ac.uk/~vgg/data/flowers/17/)
-"""
-
-from __future__ import division, print_function, absolute_import
-
 import tflearn
-from tflearn.layers.core import input_data, dropout, fully_connected
-from tflearn.layers.conv import conv_2d, max_pool_2d
-from tflearn.layers.normalization import local_response_normalization
-from tflearn.layers.estimator import regression
+import numpy as np
+import matplotlib.pyplot as plt
+import six
 
-import tflearn.datasets.oxflower17 as oxflower17
-X, Y = oxflower17.load_data(one_hot=True, resize_pics=(227, 227))
 
-# Building 'AlexNet'
-network = input_data(shape=[None, 227, 227, 3])
-network = conv_2d(network, 96, 11, strides=4, activation='relu')
-network = max_pool_2d(network, 3, strides=2)
-network = local_response_normalization(network)
-network = conv_2d(network, 256, 5, activation='relu')
-network = max_pool_2d(network, 3, strides=2)
-network = local_response_normalization(network)
-network = conv_2d(network, 384, 3, activation='relu')
-network = conv_2d(network, 384, 3, activation='relu')
-network = conv_2d(network, 256, 3, activation='relu')
-network = max_pool_2d(network, 3, strides=2)
-network = local_response_normalization(network)
-network = fully_connected(network, 4096, activation='tanh')
-network = dropout(network, 0.5)
-network = fully_connected(network, 4096, activation='tanh')
-network = dropout(network, 0.5)
-network = fully_connected(network, 17, activation='softmax')
-network = regression(network,
-                     optimizer='momentum',
-                     loss='categorical_crossentropy',
-                     learning_rate=0.002)
+def display_convolutions(model, layer, padding=4, filename=''):
+    if isinstance(layer, six.string_types):
+        vars = tflearn.get_layer_variables_by_name(layer)
+        variable = vars[0]
+    else:
+        variable = layer.W
 
-# Training
-model = tflearn.DNN(network,
-                    checkpoint_path='model_alexnet',
-                    tensorboard_dir='/tmp/tflearn_logs/',
-                    best_checkpoint_path='best_model_alexnet',
-                    max_checkpoints=1,
-                    tensorboard_verbose=3)
-model.fit(X, Y,
-          n_epoch=2,
-          validation_set=0.1,
-          shuffle=True,
-          show_metric=True,
-          batch_size=64,
-          snapshot_step=200,
-          snapshot_epoch=False,
-          run_id='alexnet_oxflowers17')
+    data = model.get_weights(variable)
 
-model.save('my_model.tflearn')
+    # N is the total number of convolutions
+    N = data.shape[2] * data.shape[3]
+
+    # Ensure the resulting image is square
+    filters_per_row = int(np.ceil(np.sqrt(N)))
+    # Assume the filters are square
+    filter_size = data.shape[0]
+    # Size of the result image including padding
+    result_size = filters_per_row * (filter_size + padding) - padding
+    # Initialize result image to all zeros
+    result = np.zeros((result_size, result_size))
+
+    # Tile the filters into the result image
+    filter_x = 0
+    filter_y = 0
+    for n in range(data.shape[3]):
+        for c in range(data.shape[2]):
+            if filter_x == filters_per_row:
+                filter_y += 1
+                filter_x = 0
+            for i in range(filter_size):
+                for j in range(filter_size):
+                    result[filter_y * (filter_size + padding) + i, filter_x * (filter_size + padding) + j] = \
+                        data[i, j, c, n]
+            filter_x += 1
+
+    # Normalize image to 0-1
+    min = result.min()
+    max = result.max()
+    result = (result - min) / (max - min)
+
+    # Plot figure
+    plt.figure(figsize=(10, 10))
+    plt.axis('off')
+    plt.imshow(result, cmap='gray', interpolation='nearest')
+
+    # Save plot if filename is set
+    if filename != '':
+        plt.savefig(filename, bbox_inches='tight', pad_inches=0)
+
+    plt.show()
