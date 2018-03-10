@@ -10,8 +10,8 @@ from tflearn.data_utils import image_preloader
 from tflearn.initializations import variance_scaling
 
 
-FOLDER_TO_LOAD = '../out/alex_3_mac/model/alex_model'
-FOLDER_TO_SAVE = '../out/alex_4_mac'
+FOLDER_TO_LOAD = '../out/alex_4_mac/model/alex_model'
+FOLDER_TO_SAVE = '../out/alex_5_mac'
 
 # dataset = './data'
 # dataset_tr = '/media/maksim/TomD/datasets/Histology_CAMELYON16_300K_Tiles/train1'
