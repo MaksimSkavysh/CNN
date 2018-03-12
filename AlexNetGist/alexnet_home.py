@@ -10,24 +10,24 @@ from tflearn.data_utils import image_preloader
 from tflearn.initializations import variance_scaling
 
 
-FOLDER_TO_LOAD = '../out/alex_4_mac/model/alex_model'
-FOLDER_TO_SAVE = '../out/alex_5_mac'
+FOLDER_TO_LOAD = '../out/alex_8_mac/model/alex_model'
+FOLDER_TO_SAVE = '../out/alex_9_mac'
 
 # dataset = './data'
 # dataset_tr = '/media/maksim/TomD/datasets/Histology_CAMELYON16_300K_Tiles/train1'
 # dataset_pr = '/media/maksim/TomD/datasets/Histology_CAMELYON16_300K_Tiles/valid1'
-dataset_tr = '../small_data/train'
-dataset_pr = '../small_data/valid'
+dataset_tr = '../home_data/train'
+# dataset_pr = '../small_data/valid'
 
 X, Y = image_preloader(dataset_tr,
                        image_shape=(227, 227),
                        mode='folder',
                        files_extension=['.png'])
 
-X_pr, Y_pr = image_preloader(dataset_pr,
-                             image_shape=(227, 227),
-                             mode='folder',
-                             files_extension=['.png'])
+# X_pr, Y_pr = image_preloader(dataset_pr,
+#                              image_shape=(227, 227),
+#                              mode='folder',
+#                              files_extension=['.png'])
 
 
 print('Start building ...')
@@ -82,8 +82,8 @@ model.load(FOLDER_TO_LOAD)
 print('\nStart training ...')
 model.fit(X,
           Y,
-          n_epoch=1,
-          validation_set=(X_pr, Y_pr),
+          n_epoch=20,
+          validation_set=0.2,
           shuffle=True,
           batch_size=128,
           show_metric=True,
