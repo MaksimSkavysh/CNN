@@ -10,8 +10,8 @@ from tflearn.data_utils import image_preloader
 from tflearn.initializations import variance_scaling
 
 
-FOLDER_TO_LOAD = '../out/alex_8_mac/model/alex_model'
-FOLDER_TO_SAVE = '../out/alex_9_mac'
+FOLDER_TO_LOAD = '../out/alex_9_mac/checkpoints-25148'
+FOLDER_TO_SAVE = '../out/alex_10_mac'
 
 # dataset = './data'
 # dataset_tr = '/media/maksim/TomD/datasets/Histology_CAMELYON16_300K_Tiles/train1'
@@ -82,7 +82,7 @@ model.load(FOLDER_TO_LOAD)
 print('\nStart training ...')
 model.fit(X,
           Y,
-          n_epoch=20,
+          n_epoch=10,
           validation_set=0.2,
           shuffle=True,
           batch_size=128,
