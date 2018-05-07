@@ -5,9 +5,9 @@ from tflearn.data_utils import image_preloader
 import alex_model
 import visualization
 
-FOLDER_TO_LOAD = '../out/alex_9_mac/checkpoints-24562'
-# FOLDER_TO_LOAD = '../out/alex_10_mac/model/alex_model'
-FOLDER_TO_SAVE = '../out/alex_9_mac'
+# FOLDER_TO_LOAD = '../out/alex_13_mac/checkpoints-24562'
+FOLDER_TO_LOAD = '../out/alex_13_mac/model/alex_model'
+FOLDER_TO_SAVE = '../out/alex_13_mac'
 
 dataset_tr = '../small_data/valid'
 X, Y = image_preloader(dataset_tr,

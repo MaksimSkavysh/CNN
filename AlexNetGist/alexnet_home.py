@@ -9,9 +9,12 @@ from tflearn.layers.estimator import regression
 from tflearn.data_utils import image_preloader
 from tflearn.initializations import variance_scaling
 
+ITERATION = 14
 
-FOLDER_TO_LOAD = '../out/alex_9_mac/checkpoints-25148'
-FOLDER_TO_SAVE = '../out/alex_10_mac'
+
+FOLDER_TO_LOAD = '../out/alex_' + str(ITERATION - 1) + '_mac/model/alex_model'
+# FOLDER_TO_LOAD = '../out/alex_' + str(ITERATION - 1) + '_mac/checkpoints-46083'
+FOLDER_TO_SAVE = '../out/alex_' + str(ITERATION) + '_mac'
 
 # dataset = './data'
 # dataset_tr = '/media/maksim/TomD/datasets/Histology_CAMELYON16_300K_Tiles/train1'
@@ -82,8 +85,8 @@ model.load(FOLDER_TO_LOAD)
 print('\nStart training ...')
 model.fit(X,
           Y,
-          n_epoch=10,
-          validation_set=0.2,
+          n_epoch=8,
+          validation_set=0.3,
           shuffle=True,
           batch_size=128,
           show_metric=True,
