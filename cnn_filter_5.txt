@@ -1,0 +1,31 @@
+['./cnn.py', '5']
+5
+Traceback (most recent call last):
+  File "./cnn.py", line 203, in <module>
+    main()
+  File "./cnn.py", line 201, in main
+    filter_size_run_cnn(size)
+  File "./cnn.py", line 107, in filter_size_run_cnn
+    import tflearn
+  File "/home/maksim/.local/lib/python3.6/site-packages/tflearn/__init__.py", line 4, in <module>
+    from . import config
+  File "/home/maksim/.local/lib/python3.6/site-packages/tflearn/config.py", line 3, in <module>
+    import tensorflow as tf
+  File "/usr/local/lib/python3.6/dist-packages/tensorflow/__init__.py", line 24, in <module>
+    from tensorflow.python import pywrap_tensorflow  # pylint: disable=unused-import
+  File "/usr/local/lib/python3.6/dist-packages/tensorflow/python/__init__.py", line 47, in <module>
+    import numpy as np
+  File "/home/maksim/.local/lib/python3.6/site-packages/numpy/__init__.py", line 142, in <module>
+    from . import add_newdocs
+  File "/home/maksim/.local/lib/python3.6/site-packages/numpy/add_newdocs.py", line 13, in <module>
+    from numpy.lib import add_newdoc
+  File "/home/maksim/.local/lib/python3.6/site-packages/numpy/lib/__init__.py", line 24, in <module>
+    from .financial import *
+  File "/home/maksim/.local/lib/python3.6/site-packages/numpy/lib/financial.py", line 15, in <module>
+    from decimal import Decimal
+  File "/usr/lib/python3.6/decimal.py", line 3, in <module>
+    from _decimal import *
+  File "/usr/lib/python3.6/collections/__init__.py", line 429, in namedtuple
+    exec(class_definition, namespace)
+  File "<string>", line 1, in <module>
+KeyboardInterrupt

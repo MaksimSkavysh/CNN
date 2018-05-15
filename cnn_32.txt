@@ -1,84 +1,0 @@
-/usr/local/lib/python3.6/dist-packages/h5py/__init__.py:36: FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated. In future, it will be treated as `np.float64 == np.dtype(float).type`.
-  from ._conv import register_converters as _register_converters
-WARNING:tensorflow:From /home/maksim/.local/lib/python3.6/site-packages/tflearn/initializations.py:119: UniformUnitScaling.__init__ (from tensorflow.python.ops.init_ops) is deprecated and will be removed in a future version.
-Instructions for updating:
-Use tf.initializers.variance_scaling instead with distribution=uniform to get equivalent behavior.
-WARNING:tensorflow:From /home/maksim/.local/lib/python3.6/site-packages/tflearn/objectives.py:66: calling reduce_sum (from tensorflow.python.ops.math_ops) with keep_dims is deprecated and will be removed in a future version.
-Instructions for updating:
-keep_dims is deprecated, use keepdims instead
-2018-05-14 08:31:31.183344: I tensorflow/core/platform/cpu_feature_guard.cc:140] Your CPU supports instructions that this TensorFlow binary was not compiled to use: FMA
-2018-05-14 08:31:31.428403: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1356] Found device 0 with properties: 
-name: GeForce GTX 1060 6GB major: 6 minor: 1 memoryClockRate(GHz): 1.7085
-pciBusID: 0000:02:00.0
-totalMemory: 5.93GiB freeMemory: 5.41GiB
-2018-05-14 08:31:31.428458: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1435] Adding visible gpu devices: 0
-2018-05-14 08:31:31.753301: I tensorflow/core/common_runtime/gpu/gpu_device.cc:923] Device interconnect StreamExecutor with strength 1 edge matrix:
-2018-05-14 08:31:31.753378: I tensorflow/core/common_runtime/gpu/gpu_device.cc:929]      0 
-2018-05-14 08:31:31.753390: I tensorflow/core/common_runtime/gpu/gpu_device.cc:942] 0:   N 
-2018-05-14 08:31:31.753600: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1053] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 5179 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1060 6GB, pci bus id: 0000:02:00.0, compute capability: 6.1)
-2018-05-14 08:31:32.685345: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1435] Adding visible gpu devices: 0
-2018-05-14 08:31:32.685474: I tensorflow/core/common_runtime/gpu/gpu_device.cc:923] Device interconnect StreamExecutor with strength 1 edge matrix:
-2018-05-14 08:31:32.685501: I tensorflow/core/common_runtime/gpu/gpu_device.cc:929]      0 
-2018-05-14 08:31:32.685523: I tensorflow/core/common_runtime/gpu/gpu_device.cc:942] 0:   N 
-2018-05-14 08:31:32.685781: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1053] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 5179 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1060 6GB, pci bus id: 0000:02:00.0, compute capability: 6.1)
-2018-05-14 08:31:32.725087: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1435] Adding visible gpu devices: 0
-2018-05-14 08:31:32.725140: I tensorflow/core/common_runtime/gpu/gpu_device.cc:923] Device interconnect StreamExecutor with strength 1 edge matrix:
-2018-05-14 08:31:32.725151: I tensorflow/core/common_runtime/gpu/gpu_device.cc:929]      0 
-2018-05-14 08:31:32.725161: I tensorflow/core/common_runtime/gpu/gpu_device.cc:942] 0:   N 
-2018-05-14 08:31:32.725268: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1053] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 5179 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1060 6GB, pci bus id: 0000:02:00.0, compute capability: 6.1)
-2018-05-14 08:31:33.354896: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1435] Adding visible gpu devices: 0
-2018-05-14 08:31:33.354954: I tensorflow/core/common_runtime/gpu/gpu_device.cc:923] Device interconnect StreamExecutor with strength 1 edge matrix:
-2018-05-14 08:31:33.354966: I tensorflow/core/common_runtime/gpu/gpu_device.cc:929]      0 
-2018-05-14 08:31:33.354978: I tensorflow/core/common_runtime/gpu/gpu_device.cc:942] 0:   N 
-2018-05-14 08:31:33.355080: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1053] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 5179 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1060 6GB, pci bus id: 0000:02:00.0, compute capability: 6.1)
-['./cnn.py', '32']
-32
-
-
-
-start with size: 32
-Start building ...
-
-Start loading ./out/alex_s32_1/model/alex_model ... 
-
-Start training ...
----------------------------------
-Run id: alex_TB5
-Log directory: ./out/alex_s32_2/logs/
-[?25l---------------------------------
-Training samples: 118409
-Validation samples: 30864
---
-Training Step: 18521  | total loss: [1m[32m0.30475[0m[0m | time: 1.764s
-[2K| Momentum | epoch: 001 | loss: 0.30475 - acc: 0.8713 -- iter: 000128/118409
-[A[ATraining Step: 18522  | total loss: [1m[32m0.30972[0m[0m | time: 1.796s
-[2K| Momentum | epoch: 001 | loss: 0.30972 - acc: 0.8701 -- iter: 000256/118409
-[A[ATraining Step: 18523  | total loss: [1m[32m0.30881[0m[0m | time: 1.825s
-[2K| Momentum | epoch: 001 | loss: 0.30881 - acc: 0.8706 -- iter: 000384/118409
-[A[ATraining Step: 18524  | total loss: [1m[32m0.30806[0m[0m | time: 1.854s
-[2K| Momentum | epoch: 001 | loss: 0.30806 - acc: 0.8710 -- iter: 000512/118409
-[A[ATraining Step: 18525  | total loss: [1m[32m0.31810[0m[0m | time: 1.884s
-[2K| Momentum | epoch: 001 | loss: 0.31810 - acc: 0.8652 -- iter: 000640/118409
-[A[ATraining Step: 18526  | total loss: [1m[32m0.32114[0m[0m | time: 1.911s
-[2K| Momentum | epoch: 001 | loss: 0.32114 - acc: 0.8638 -- iter: 000768/118409
-[A[ATraining Step: 18527  | total loss: [1m[32m0.31088[0m[0m | time: 1.941s
-[2K| Momentum | epoch: 001 | loss: 0.31088 - acc: 0.8681 -- iter: 000896/118409
-[A[ATraining Step: 18528  | total loss: [1m[32m0.30782[0m[0m | time: 1.971s
-[2K| Momentum | epoch: 001 | loss: 0.30782 - acc: 0.8703 -- iter: 001024/118409
-[A[ATraining Step: 18529  | total loss: [1m[32m0.31583[0m[0m | time: 1.999s
-[2K| Momentum | epoch: 001 | loss: 0.31583 - acc: 0.8661 -- iter: 001152/118409
-[A[ATraining Step: 18530  | total loss: [1m[32m0.30520[0m[0m | time: 2.027s
-[2K| Momentum | epoch: 001 | loss: 0.30520 - acc: 0.8740 -- iter: 001280/118409
-[A[ATraining Step: 18531  | total loss: [1m[32m0.30097[0m[0m | time: 2.057s
-[2K| Momentum | epoch: 001 | loss: 0.30097 - acc: 0.8757 -- iter: 001408/118409
-[A[ATraining Step: 18532  | total loss: [1m[32m0.29511[0m[0m | time: 2.088s
-[2K| Momentum | epoch: 001 | loss: 0.29511 - acc: 0.8795 -- iter: 001536/118409
-[A[ATraining Step: 18533  | total loss: [1m[32m0.29464[0m[0m | time: 2.266s
-[2K| Momentum | epoch: 001 | loss: 0.29464 - acc: 0.8783 -- iter: 001664/118409
-[A[ATraining Step: 18534  | total loss: [1m[32m0.29739[0m[0m | time: 2.437s
-[2K| Momentum | epoch: 001 | loss: 0.29739 - acc: 0.8780 -- iter: 001792/118409
-[A[ATraining Step: 18535  | total loss: [1m[32m0.30864[0m[0m | time: 2.604s
-[2K| Momentum | epoch: 001 | loss: 0.30864 - acc: 0.8683 -- iter: 001920/118409
-[A[ATraining Step: 18536  | total loss: [1m[32m0.30589[0m[0m | time: 2.771s
-[2K| Momentum | epoch: 001 | loss: 0.30589 - acc: 0.8697 -- iter: 002048/118409
-[A[A
