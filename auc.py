@@ -1,126 +1,98 @@
 from __future__ import division, print_function, absolute_import
-import sys
-
-import tflearn
-from tflearn.layers.core import input_data, dropout, fully_connected
-from tflearn.layers.conv import conv_2d, max_pool_2d
-from tflearn.layers.normalization import local_response_normalization
-from tflearn.layers.estimator import regression
 from tflearn.data_utils import image_preloader
-
-from sklearn.metrics import roc_curve
-from sklearn.metrics import roc_auc_score
 from sklearn import metrics
 import matplotlib.pyplot as plt
+from models.alex import get_alex_model
+
 
 ITERATION = 2
 TRAIN_DATA = './train_data'
 VAL_DATA = './val_data'
 
 
-def get_alex_model(
-        filter_size,
-        folder_to_save,
-        folder_to_load,
-        image_size=128,
-        strides=4,
-        learning_rate=0.0003,
+def calculate_and_print_roc(
+        arr_val,
+        arr_pred,
+        title='',
+        color='b',
 ):
-    print('Start building ...')
-    network = input_data(shape=[None, image_size, image_size, 3])
-    network = conv_2d(network,
-                      nb_filter=96,
-                      filter_size=filter_size,
-                      strides=strides,
-                      activation='relu',
-                      regularizer='L2',
-                      weight_decay=0.0005,
-                      bias_init='uniform',
-                      trainable=True,
-                      restore=True)
-    network = max_pool_2d(network, 3, strides=2)
-    network = local_response_normalization(network)
-    network = conv_2d(network, 256, 5, activation='relu')
-
-    network = max_pool_2d(network, 3, strides=2)
-    network = local_response_normalization(network)
-    network = conv_2d(network, 384, 3, activation='relu')
-    network = conv_2d(network, 384, 3, activation='relu')
-    network = conv_2d(network, 256, 3, activation='relu')
-    network = max_pool_2d(network, 3, strides=2)
-    network = local_response_normalization(network)
-    network = fully_connected(network, 4096, activation='relu')
-    network = dropout(network, 0.5)
-    network = fully_connected(network, 4096, activation='relu')
-    network = dropout(network, 0.5)
-    network = fully_connected(network, 2, activation='softmax')
-    network = regression(network,
-                         optimizer='momentum',
-                         loss='categorical_crossentropy',
-                         learning_rate=learning_rate)
-
-    model = tflearn.DNN(network,
-                        checkpoint_path=folder_to_save + '/checkpoints/',
-                        tensorboard_dir=folder_to_save + '/logs/',
-                        best_checkpoint_path=folder_to_save + '/best_checkpoint',
-                        max_checkpoints=3,
-                        best_val_accuracy=0.6,
-                        tensorboard_verbose=0)
-    if folder_to_load:
-        print('\nStart loading ' + folder_to_load + ' ... ')
-        model.load(folder_to_load)
-
-    return model
-
-
-def filter_size_run_cnn(filter_size):
-    image_size = 128
-    strides = 4
-    if filter_size < 9:
-        strides = 2
-
-    print('\n\n\nstart with filter size: ' + str(filter_size) + '; and strides: ' + str(strides))
-    folder_to_save = './out/alex_f' + str(filter_size) + '_' + str(ITERATION)
-    folder_to_load = './out/alex_s128_1/model/alex_model'
-    x_val, y_val = image_preloader(VAL_DATA,
-                                   image_shape=(image_size, image_size),
-                                   mode='file',
-                                   files_extension=['.png'])
-
-    model = get_alex_model(
-        filter_size=filter_size,
-        folder_to_save=folder_to_save,
-        folder_to_load=folder_to_load,
-        image_size=image_size,
-        strides=strides,
-        learning_rate=0.0003,
-    )
-    print('\nStart training ...')
-    x_val = x_val[:500]
-    y_val = y_val[:500]
-    y_pred = model.predict_label(x_val)
-
-    print('\nCalculating AUC ROC ...')
-
-    # arr_pred = [y[0] for y in y_pred]
-    # arr_val = [y[1] for y in y_val]
     # res = roc_auc_score(arr_val, arr_pred)
     # # res = tflearn.objectives.roc_auc_score(y_pred, y_pred)
     # print(res)
 
-    fpr, tpr, threshold = metrics.roc_curve(y_val, y_pred)
+    fpr, tpr, threshold = metrics.roc_curve(arr_val, arr_pred)
     roc_auc = metrics.auc(fpr, tpr)
+    print(title, roc_auc)
 
     # method I: plt
-    plt.title('Receiver Operating Characteristic')
-    plt.plot(fpr, tpr, 'b')
+    plt.title('ROC ' + title)
+    plt.plot(fpr, tpr, color=color)
     plt.legend(loc='lower right')
     plt.plot([0, 1], [0, 1], 'r--')
     plt.xlim([0, 1])
     plt.ylim([0, 1])
     plt.ylabel('True Positive Rate')
     plt.xlabel('False Positive Rate')
+
+
+def predict_all(model, x_val, y_val, step=500):
+    labels_num = len(x_val)
+    print('\nStart predicting,  total:' + str(labels_num))
+
+    arr_pred = []
+    arr_val = []
+    # labels_num = 2000
+    for i in range(step, labels_num, step):
+        print('step: ' + str(i) + '/' + str(labels_num))
+        y_pred = model.predict(x_val[i-step:i])
+        # y_pred = model.predict_label(x_val[i-step:i])
+        arr_pred = arr_pred + [y[0] for y in y_pred]
+        arr_val = arr_val + [y[0] for y in y_val[i-step:i]]
+    return arr_pred, arr_val
+
+
+def alexnet_rocauc(
+    image_size=128,
+    strides=4,
+    filter_size=11,
+    folder_to_load='./out/alex_s128_2/model/model',
+    title='alex net 160 11',
+):
+    x_val, y_val = image_preloader(VAL_DATA,
+                                   image_shape=(image_size, image_size),
+                                   mode='file',
+                                   files_extension=['.png'])
+    model = get_alex_model(
+        filter_size=filter_size,
+        folder_to_save='not_meter',
+        folder_to_load=folder_to_load,
+        image_size=image_size,
+        strides=strides,
+        learning_rate=0.0003,
+    )
+
+    arr_pred, arr_val = predict_all(model, x_val, y_val)
+    calculate_and_print_roc(arr_val, arr_pred, title=title)
+
+
+alex_size_params = [
+    ("AlexNet 32x32", "./out/alex_s32_2/model/model", 32),
+    ("AlexNet 64x64", "./out/alex_s64_2/model/model", 64),
+    ("AlexNet 128x128", "./out/alex_s128_2/model/model", 128),
+    ("AlexNet 160x160", "./out/alex_s160_2/model/model", 160),
+    ("AlexNet 256x256", "./out/alex_s256_2/checkpoints-36114", 256),
+]
+
+
+def build_auc():
+    i = 4
+    alexnet_rocauc(
+        title=alex_size_params[i][0],
+        image_size=alex_size_params[i][2],
+        folder_to_load=alex_size_params[i][1],
+    )
+
     plt.show()
 
 
-filter_size_run_cnn(11)
+build_auc()

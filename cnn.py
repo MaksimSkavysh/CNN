@@ -1,71 +1,14 @@
 from __future__ import division, print_function, absolute_import
-import sys
+import numpy as np
 
-import tflearn
-from tflearn.layers.core import input_data, dropout, fully_connected
-from tflearn.layers.conv import conv_2d, max_pool_2d
-from tflearn.layers.normalization import local_response_normalization
-from tflearn.layers.estimator import regression
 from tflearn.data_utils import image_preloader
+from models.alex import get_alex_model
 
-ITERATION = 2
-TRAIN_DATA = './train_data'
-VAL_DATA = './val_data'
-
-
-def get_alex_model(
-        filter_size,
-        folder_to_save,
-        folder_to_load,
-        image_size=128,
-        strides=4,
-        learning_rate=0.0003,
-):
-    print('Start building ...')
-    network = input_data(shape=[None, image_size, image_size, 3])
-    network = conv_2d(network,
-                      nb_filter=96,
-                      filter_size=filter_size,
-                      strides=strides,
-                      activation='relu',
-                      regularizer='L2',
-                      weight_decay=0.0005,
-                      bias_init='uniform',
-                      trainable=True,
-                      restore=True)
-    network = max_pool_2d(network, 3, strides=2)
-    network = local_response_normalization(network)
-    network = conv_2d(network, 256, 5, activation='relu')
-
-    network = max_pool_2d(network, 3, strides=2)
-    network = local_response_normalization(network)
-    network = conv_2d(network, 384, 3, activation='relu')
-    network = conv_2d(network, 384, 3, activation='relu')
-    network = conv_2d(network, 256, 3, activation='relu')
-    network = max_pool_2d(network, 3, strides=2)
-    network = local_response_normalization(network)
-    network = fully_connected(network, 4096, activation='relu')
-    network = dropout(network, 0.5)
-    network = fully_connected(network, 4096, activation='relu')
-    network = dropout(network, 0.5)
-    network = fully_connected(network, 2, activation='softmax')
-    network = regression(network,
-                         optimizer='momentum',
-                         loss='categorical_crossentropy',
-                         learning_rate=learning_rate)
-
-    model = tflearn.DNN(network,
-                        checkpoint_path=folder_to_save + '/checkpoints/',
-                        tensorboard_dir=folder_to_save + '/logs/',
-                        best_checkpoint_path=folder_to_save + '/best_checkpoint',
-                        max_checkpoints=3,
-                        best_val_accuracy=0.6,
-                        tensorboard_verbose=0)
-    if folder_to_load:
-        print('\nStart loading ' + folder_to_load + ' ... ')
-        model.load(folder_to_load)
-
-    return model
+ITERATION = 1
+TRAIN_DATA = './train_data_grey'
+VAL_DATA = './val_data_grey'
+# TRAIN_DATA = './train_data'
+# VAL_DATA = './val_data'
 
 
 def img_size_run_cnn(size):
@@ -112,17 +55,25 @@ def filter_size_run_cnn(filter_size):
         strides = 2
 
     print('\n\n\nstart with filter size: ' + str(filter_size) + '; and strides: ' + str(strides))
-    folder_to_save = './out/alex_f' + str(filter_size) + '_' + str(ITERATION)
-    folder_to_load = './out/alex_f' + str(image_size) + '_' + str(ITERATION-1) + '/model/alex_model'
+    folder_to_save = './out_grey/alex_f' + str(filter_size) + '_' + str(ITERATION)
+    # folder_to_load = './out/alex_f' + str(filter_size) + '_' + str(ITERATION-1) + '/model/model'
+    folder_to_load = ''
 
     x, y = image_preloader(TRAIN_DATA,
                            image_shape=(image_size, image_size),
+                           grayscale=True,
+                           # filter_channel=True,
                            mode='file',
                            files_extension=['.png'])
     x_val, y_val = image_preloader(VAL_DATA,
                                    image_shape=(image_size, image_size),
+                                   grayscale=True,
+                                   # filter_channel=True,
                                    mode='file',
                                    files_extension=['.png'])
+
+    x = np.reshape(x, (len(x), 128, 128, 1))
+    x_val = np.reshape(x_val, (len(x_val), 128, 128, 1))
 
     model = get_alex_model(
         filter_size=filter_size,
@@ -131,6 +82,7 @@ def filter_size_run_cnn(filter_size):
         image_size=image_size,
         strides=strides,
         learning_rate=0.0003,
+        depth=1,
     )
     print('\nStart training ...')
     model.fit(x,
@@ -145,6 +97,9 @@ def filter_size_run_cnn(filter_size):
     print('\nStart saving ...')
     model.save(folder_to_save + '/model/model')
 
+
+filter_size_run_cnn(11)
+
 # python3.6 ./cnn.py 3 &> cnn_filter_3.txt; python3.6 ./cnn.py 5 &> cnn_filter_5.txt; python3.6 ./cnn.py 7 &> cnn_filter_7.txt; python3.6 ./cnn.py 9 &> cnn_filter_9.txt; python3.6 ./cnn.py 11 &> cnn_filter_11.txt;
 # python3.6 ./cnn.py 11 &> cnn_filter_11.txt; python3.6 ./cnn.py 3 &> cnn_filter_3.txt
 
@@ -158,4 +113,3 @@ def filter_size_run_cnn(filter_size):
 #
 # main()
 
-filter_size_run_cnn(3)

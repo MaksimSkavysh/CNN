@@ -1,0 +1,25 @@
+/usr/local/lib/python3.6/dist-packages/h5py/__init__.py:36: FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated. In future, it will be treated as `np.float64 == np.dtype(float).type`.
+  from ._conv import register_converters as _register_converters
+
+
+
+start with filter size: 11; and strides: 4
+Traceback (most recent call last):
+  File "/home/maksim/.local/lib/python3.6/site-packages/numpy/core/fromnumeric.py", line 52, in _wrapfunc
+    return getattr(obj, method)(*args, **kwds)
+AttributeError: 'ImagePreloader' object has no attribute 'reshape'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "./cnn.py", line 100, in <module>
+    filter_size_run_cnn(11)
+  File "./cnn.py", line 68, in filter_size_run_cnn
+    x = np.reshape(x, (128, 128, 128, 1))
+  File "/home/maksim/.local/lib/python3.6/site-packages/numpy/core/fromnumeric.py", line 257, in reshape
+    return _wrapfunc(a, 'reshape', newshape, order=order)
+  File "/home/maksim/.local/lib/python3.6/site-packages/numpy/core/fromnumeric.py", line 62, in _wrapfunc
+    return _wrapit(obj, method, *args, **kwds)
+  File "/home/maksim/.local/lib/python3.6/site-packages/numpy/core/fromnumeric.py", line 42, in _wrapit
+    result = getattr(asarray(obj), method)(*args, **kwds)
+ValueError: cannot reshape array of size 1940013056 into shape (128,128,128,1)

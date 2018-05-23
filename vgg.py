@@ -10,12 +10,11 @@ from tflearn.data_utils import image_preloader
 print('\nVGG network with 128x128 images input\n')
 
 # Data loading and preprocessing
-ITERATION = 2
+ITERATION = 3
 
 FOLDER_TO_SAVE = './out/vgg_im128_i' + str(ITERATION)
-# FOLDER_TO_LOAD = './out/vgg_i' + str(ITERATION-1) + '/model/alex_model'
-# FOLDER_TO_LOAD = './out/vgg_i' + str(ITERATION) + '/best_checkpoint9255'
-FOLDER_TO_LOAD = './vgg_i2/best_checkpoint9255'
+# FOLDER_TO_LOAD = './out/vgg_im128_i2/checkpoints-74020'
+FOLDER_TO_LOAD = './out/vgg_im128_i3/checkpoints-111030'
 
 TRAIN_DATA = './train_data'
 VAL_DATA = './val_data'
@@ -80,7 +79,7 @@ model = tflearn.DNN(network,
 
 # # print('\nStart loading ' + FOLDER_TO_LOAD + ' ... ')
 # # model.load(FOLDER_TO_LOAD)
-#
+
 # print('\nStart loading ' + FOLDER_TO_LOAD + ' ... ')
 # model.load(FOLDER_TO_LOAD)
 
