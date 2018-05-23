@@ -3,6 +3,7 @@ from tflearn.data_utils import image_preloader
 from sklearn import metrics
 import matplotlib.pyplot as plt
 from models.alex import get_alex_model
+from models.zf import get_zf_model
 
 
 ITERATION = 2
@@ -75,6 +76,29 @@ def alexnet_rocauc(
     calculate_and_print_roc(arr_val, arr_pred, title=title)
 
 
+def zfnet_rocauc(
+    image_size=128,
+    strides=2,
+    folder_to_load='./out/zfnet_1/checkpoints-96226',
+    title='ZF Net',
+):
+    x_val, y_val = image_preloader(VAL_DATA,
+                                   image_shape=(image_size, image_size),
+                                   mode='file',
+                                   files_extension=['.png'])
+    model = get_zf_model(
+        filter_size=7,
+        folder_to_save='not_meter',
+        folder_to_load=folder_to_load,
+        image_size=image_size,
+        strides=strides,
+        learning_rate=0.0003,
+    )
+
+    arr_pred, arr_val = predict_all(model, x_val, y_val, step=200)
+    calculate_and_print_roc(arr_val, arr_pred, title=title)
+
+
 alex_size_params = [
     ("AlexNet 32x32", "./out/alex_s32_2/model/model", 32),
     ("AlexNet 64x64", "./out/alex_s64_2/model/model", 64),
@@ -85,12 +109,14 @@ alex_size_params = [
 
 
 def build_auc():
-    i = 4
-    alexnet_rocauc(
-        title=alex_size_params[i][0],
-        image_size=alex_size_params[i][2],
-        folder_to_load=alex_size_params[i][1],
-    )
+    # i = 4
+    # alexnet_rocauc(
+    #     title=alex_size_params[i][0],
+    #     image_size=alex_size_params[i][2],
+    #     folder_to_load=alex_size_params[i][1],
+    # )
+
+    zfnet_rocauc()
 
     plt.show()
 

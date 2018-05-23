@@ -14,7 +14,7 @@ def get_zf_model(
         learning_rate=0.0003,
 ):
     print('Start building ...')
-    network = input_data(shape=[None, image_size, image_size, None])
+    network = input_data(shape=[None, image_size, image_size, 3])
     network = conv_2d(network,
                       nb_filter=96,
                       filter_size=filter_size,
@@ -53,7 +53,7 @@ def get_zf_model(
                         max_checkpoints=3,
                         best_val_accuracy=0.6,
                         tensorboard_verbose=0)
-    # if folder_to_load:
-    #     print('\nStart loading ' + folder_to_load + ' ... ')
-    #     model.load(folder_to_load)
+    if folder_to_load:
+        print('\nStart loading ' + folder_to_load + ' ... ')
+        model.load(folder_to_load)
     return model
