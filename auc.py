@@ -4,11 +4,15 @@ from sklearn import metrics
 import matplotlib.pyplot as plt
 from models.alex import get_alex_model
 from models.zf import get_zf_model
+from models.vgg import get_vgg_model
+import numpy as np
 
 
 ITERATION = 2
-TRAIN_DATA = './train_data'
-VAL_DATA = './val_data'
+# TRAIN_DATA = './train_data'
+# VAL_DATA = './val_data'
+TRAIN_DATA = './train_data_grey'
+VAL_DATA = './val_data_grey'
 
 
 def calculate_and_print_roc(
@@ -63,6 +67,10 @@ def alexnet_rocauc(
                                    image_shape=(image_size, image_size),
                                    mode='file',
                                    files_extension=['.png'])
+
+    print('loaded_data')
+    x_val = np.reshape(x_val, (len(x_val), 128, 128, 1))
+
     model = get_alex_model(
         filter_size=filter_size,
         folder_to_save='not_meter',
@@ -70,6 +78,7 @@ def alexnet_rocauc(
         image_size=image_size,
         strides=strides,
         learning_rate=0.0003,
+        depth=1,
     )
 
     arr_pred, arr_val = predict_all(model, x_val, y_val)
@@ -99,12 +108,36 @@ def zfnet_rocauc(
     calculate_and_print_roc(arr_val, arr_pred, title=title)
 
 
+def vgg_rocauc(
+    folder_to_load='./out/vgg_im128_i3/checkpoints-111030',
+    title='VGG Net',
+):
+    x_val, y_val = image_preloader(VAL_DATA,
+                                   image_shape=(128, 128),
+                                   mode='file',
+                                   files_extension=['.png'])
+
+    model = get_vgg_model(foler_to_save='not_meter', folder_to_load=folder_to_load)
+
+    arr_pred, arr_val = predict_all(model, x_val, y_val, step=200)
+    calculate_and_print_roc(arr_val, arr_pred, title=title)
+
+
 alex_size_params = [
     ("AlexNet 32x32", "./out/alex_s32_2/model/model", 32),
     ("AlexNet 64x64", "./out/alex_s64_2/model/model", 64),
     ("AlexNet 128x128", "./out/alex_s128_2/model/model", 128),
     ("AlexNet 160x160", "./out/alex_s160_2/model/model", 160),
     ("AlexNet 256x256", "./out/alex_s256_2/checkpoints-36114", 256),
+]
+
+
+alex_filter_params = [
+    ("AlexNet filter size 3", "./out/alex_f3_1/model/model", 3, 2),
+    ("AlexNet filter size 5", "./out/alex_f5_1/model/model", 5, 2),
+    ("AlexNet filter size 7", "./out/alex_f7_1/model/model", 7, 2),
+    ("AlexNet filter size 9", "./out/alex_f9_1/model/model", 9, 4),
+    ("AlexNet filter size 11", "./out/alex_f11_1/model/model", 11, 4),
 ]
 
 
@@ -115,8 +148,21 @@ def build_auc():
     #     image_size=alex_size_params[i][2],
     #     folder_to_load=alex_size_params[i][1],
     # )
+    # i = 4
+    # alexnet_rocauc(
+    #     title=alex_filter_params[i][0],
+    #     folder_to_load=alex_filter_params[i][1],
+    #     filter_size=alex_filter_params[i][2],
+    #     strides=alex_filter_params[i][3],
+    # )
 
-    zfnet_rocauc()
+    alexnet_rocauc(
+        title='Gray scale',
+        image_size=128,
+        folder_to_load='out_grey/alex_f11_1/model/model',
+    )
+    # zfnet_rocauc()
+    # vgg_rocauc()
 
     plt.show()
 

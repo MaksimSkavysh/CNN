@@ -1,10 +1,6 @@
 from __future__ import division, print_function, absolute_import
-
-import tflearn
-from tflearn.layers.core import input_data, dropout, fully_connected
-from tflearn.layers.conv import conv_2d, max_pool_2d
-from tflearn.layers.estimator import regression
 from tflearn.data_utils import image_preloader
+from models.vgg import get_vgg_model
 
 
 print('\nVGG network with 128x128 images input\n')
@@ -31,58 +27,8 @@ X_val, Y_val = image_preloader(
     files_extension=['.png'],
 )
 
-# Building 'VGG Network'
-network = input_data(shape=[None, 128, 128, 3])
 
-network = conv_2d(network, 64, 3, activation='relu')
-network = conv_2d(network, 64, 3, activation='relu')
-network = max_pool_2d(network, 2, strides=2)
-
-network = conv_2d(network, 128, 3, activation='relu')
-network = conv_2d(network, 128, 3, activation='relu')
-network = max_pool_2d(network, 2, strides=2)
-
-network = conv_2d(network, 256, 3, activation='relu')
-network = conv_2d(network, 256, 3, activation='relu')
-network = conv_2d(network, 256, 3, activation='relu')
-network = max_pool_2d(network, 2, strides=2)
-
-network = conv_2d(network, 512, 3, activation='relu')
-network = conv_2d(network, 512, 3, activation='relu')
-network = conv_2d(network, 512, 3, activation='relu')
-network = max_pool_2d(network, 2, strides=2)
-
-network = conv_2d(network, 512, 3, activation='relu')
-network = conv_2d(network, 512, 3, activation='relu')
-network = conv_2d(network, 512, 3, activation='relu')
-network = max_pool_2d(network, 2, strides=2)
-
-network = fully_connected(network, 4096, activation='relu')
-network = dropout(network, 0.5)
-network = fully_connected(network, 4096, activation='relu')
-network = dropout(network, 0.5)
-network = fully_connected(network, 2, activation='softmax')
-
-network = regression(network, optimizer='rmsprop',
-                     loss='categorical_crossentropy',
-                     learning_rate=0.0001)
-
-# Training
-model = tflearn.DNN(network,
-                    checkpoint_path=FOLDER_TO_SAVE + '/checkpoints/',
-                    tensorboard_dir=FOLDER_TO_SAVE + '/logs/',
-                    best_checkpoint_path=FOLDER_TO_SAVE + '/best_checkpoint',
-                    best_val_accuracy=0.8,
-                    max_checkpoints=2,
-                    tensorboard_verbose=0)
-
-
-# # print('\nStart loading ' + FOLDER_TO_LOAD + ' ... ')
-# # model.load(FOLDER_TO_LOAD)
-
-# print('\nStart loading ' + FOLDER_TO_LOAD + ' ... ')
-# model.load(FOLDER_TO_LOAD)
-
+model = get_vgg_model(foler_to_save=FOLDER_TO_SAVE, folder_to_load='')
 print('\nStart training ...')
 model.fit(X, Y,
           n_epoch=20,

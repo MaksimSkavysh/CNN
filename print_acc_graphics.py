@@ -100,21 +100,17 @@ alex_256 = "out/alex_s256_2/cnn_256.txt"
 # plt.title('Image size: 256')
 # print_val(alex_256, "orange")
 
-plt.subplot(511)
-plt.title('Filter size: 3')
-print_val(alex_filter_3, "red")
-plt.subplot(512)
-plt.title('Filter size: 5')
-print_val(alex_filter_5, "green")
-plt.subplot(513)
-plt.title('Filter size: 7')
-print_val(alex_filter_7, "blue")
-plt.subplot(514)
-plt.title('Filter size: 9')
-print_val(alex_filter_9, "black")
-plt.subplot(515)
-plt.title('Filter size: 11')
-print_val(alex_filter_11, "orange")
+
+
+
+plt.subplot(211)
+plt.ylim(0.8, 0.92)
+plt.title('rgb')
+print_val(alex_filter_11, "blue")
+plt.subplot(212)
+plt.ylim(0.8, 0.92)
+plt.title('gray')
+print_val('gray.txt', "orange")
 
 
 # plt.title('ZFNet accuracy')

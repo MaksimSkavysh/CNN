@@ -71,7 +71,7 @@ def filter_size_run_cnn(filter_size):
                                    # filter_channel=True,
                                    mode='file',
                                    files_extension=['.png'])
-
+    print('loaded_data')
     x = np.reshape(x, (len(x), 128, 128, 1))
     x_val = np.reshape(x_val, (len(x_val), 128, 128, 1))
 

@@ -12,9 +12,10 @@ def get_zf_model(
         image_size=128,
         strides=4,
         learning_rate=0.0003,
+        channels=3,
 ):
     print('Start building ...')
-    network = input_data(shape=[None, image_size, image_size, 3])
+    network = input_data(shape=[None, image_size, image_size, channels])
     network = conv_2d(network,
                       nb_filter=96,
                       filter_size=filter_size,
