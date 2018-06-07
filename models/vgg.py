@@ -4,9 +4,9 @@ from tflearn.layers.conv import conv_2d, max_pool_2d
 from tflearn.layers.estimator import regression
 
 
-def get_vgg_model(foler_to_save, folder_to_load):
+def get_vgg_model(foler_to_save, folder_to_load, depth=3):
     # Building 'VGG Network'
-    network = input_data(shape=[None, 128, 128, 3])
+    network = input_data(shape=[None, 128, 128, depth])
 
     network = conv_2d(network, 64, 3, activation='relu')
     network = conv_2d(network, 64, 3, activation='relu')
