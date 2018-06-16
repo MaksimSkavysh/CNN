@@ -88,13 +88,17 @@ def alexnet_rocauc(
 def zfnet_rocauc(
     image_size=128,
     strides=2,
-    folder_to_load='./out/zfnet_1/checkpoints-96226',
+    folder_to_load='./out_grey/zfnet_2/checkpoints-296040',
     title='ZF Net',
 ):
     x_val, y_val = image_preloader(VAL_DATA,
                                    image_shape=(image_size, image_size),
                                    mode='file',
                                    files_extension=['.png'])
+
+    print('loaded_data')
+    x_val = np.reshape(x_val, (len(x_val), 128, 128, 1))
+
     model = get_zf_model(
         filter_size=7,
         folder_to_save='not_meter',
@@ -102,6 +106,7 @@ def zfnet_rocauc(
         image_size=image_size,
         strides=strides,
         learning_rate=0.0003,
+        channels=1,
     )
 
     arr_pred, arr_val = predict_all(model, x_val, y_val, step=200)
@@ -109,7 +114,7 @@ def zfnet_rocauc(
 
 
 def vgg_rocauc(
-    folder_to_load='./out/vgg_im128_i3/checkpoints-111030',
+    folder_to_load='./out_grey/vgg_i1/checkpoints-185050',
     title='VGG Net',
 ):
     x_val, y_val = image_preloader(VAL_DATA,
@@ -117,7 +122,10 @@ def vgg_rocauc(
                                    mode='file',
                                    files_extension=['.png'])
 
-    model = get_vgg_model(foler_to_save='not_meter', folder_to_load=folder_to_load)
+    print('loaded_data')
+    x_val = np.reshape(x_val, (len(x_val), 128, 128, 1))
+
+    model = get_vgg_model(foler_to_save='not_meter', folder_to_load=folder_to_load, depth=1)
 
     arr_pred, arr_val = predict_all(model, x_val, y_val, step=200)
     calculate_and_print_roc(arr_val, arr_pred, title=title)
@@ -156,13 +164,13 @@ def build_auc():
     #     strides=alex_filter_params[i][3],
     # )
 
-    alexnet_rocauc(
-        title='Gray scale',
-        image_size=128,
-        folder_to_load='out_grey/alex_f11_1/model/model',
-    )
+    # alexnet_rocauc(
+    #     title='Gray scale',
+    #     image_size=128,
+    #     folder_to_load='out_grey/alex_f11_1/model/model',
+    # )
     # zfnet_rocauc()
-    # vgg_rocauc()
+    vgg_rocauc()
 
     plt.show()
 

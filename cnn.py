@@ -5,9 +5,11 @@ from tflearn.data_utils import image_preloader
 from models.alex import get_alex_model
 
 ITERATION = 1
-TRAIN_DATA = './train_data_grey'
-VAL_DATA = './val_data_grey'
-# TRAIN_DATA = './train_data'
+TRAIN_DATA = './train_data_5D'
+VAL_DATA = './val_data_5D'
+# TRAIN_DATA = './train_data_grey'
+# VAL_DATA = './val_data_grey'
+# TRAIN_DATA = './train_data'S
 # VAL_DATA = './val_data'
 
 
@@ -50,7 +52,7 @@ def img_size_run_cnn(size):
 def filter_size_run_cnn(filter_size):
     image_size = 128
     strides = 4
-    batch_size = 128
+    batch_size = 2
     if filter_size < 9:
         strides = 2
 
@@ -61,19 +63,19 @@ def filter_size_run_cnn(filter_size):
 
     x, y = image_preloader(TRAIN_DATA,
                            image_shape=(image_size, image_size),
-                           grayscale=True,
-                           # filter_channel=True,
+                           # grayscale=True,
+                           filter_channel=False,
                            mode='file',
                            files_extension=['.png'])
     x_val, y_val = image_preloader(VAL_DATA,
                                    image_shape=(image_size, image_size),
-                                   grayscale=True,
-                                   # filter_channel=True,
+                                   # grayscale=True,
+                                   filter_channel=False,
                                    mode='file',
                                    files_extension=['.png'])
     print('loaded_data')
-    x = np.reshape(x, (len(x), 128, 128, 1))
-    x_val = np.reshape(x_val, (len(x_val), 128, 128, 1))
+    x = np.reshape(x, (len(x), 128, 128, 5))
+    x_val = np.reshape(x_val, (len(x_val), 128, 128, 5))
 
     model = get_alex_model(
         filter_size=filter_size,
@@ -82,7 +84,7 @@ def filter_size_run_cnn(filter_size):
         image_size=image_size,
         strides=strides,
         learning_rate=0.0003,
-        depth=1,
+        depth=5,
     )
     print('\nStart training ...')
     model.fit(x,
